@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Mattress Layer Comparison</title>
+
+  <style>
+    /*
+      Design direction:
+      - White editorial layout
+      - Purple technical diagrams
+      - Teal call-to-action accents
+      - Anatomical-chart-inspired labels with leader lines
+      - Modal interaction inspired by promotional signup dialogs
+    */
+
+    :root {
+      --purple: #4d176f;
+      --purple-dark: #321048;
+      --purple-light: #a97bc4;
+      --lavender: #d7b9e5;
+      --teal: #59e7bd;
+      --ink: #24182b;
+      --muted: #6b6070;
+      --line: #d9d1dc;
+      --surface: #ffffff;
+      --soft-surface: #faf8fb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--surface);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .site-header {
+      border-bottom: 1px solid #eee8f0;
+      background: rgba(255, 255, 255, 0.96);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav {
+      max-width: 1240px;
+      margin: auto;
+      min-height: 68px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      color: var(--purple);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+      color: var(--purple);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .hero {
+      max-width: 1240px;
+      margin: auto;
+      padding: 78px 24px 36px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: var(--purple);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 14px 0 10px;
+      color: var(--purple);
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 400;
+      letter-spacing: -0.055em;
+      line-height: 0.98;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    .comparison {
+      max-width: 1240px;
+      margin: auto;
+      padding: 32px 24px 100px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 50px;
+    }
+
+    .product-card {
+      min-width: 0;
+    }
+
+    .product-heading {
+      min-height: 125px;
+      text-align: center;
+    }
+
+    .product-heading h2 {
+      margin: 0 0 8px;
+      color: var(--purple);
+      font-size: 1.7rem;
+      font-weight: 500;
+    }
+
+    .product-heading p {
+      margin: 0 auto 20px;
+      max-width: 350px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .price {
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .diagram-wrap {
+      position: relative;
+      min-height: 540px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 80px 42px 110px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at center, #ffffff 0%, #ffffff 55%, #faf7fc 100%);
+      overflow: hidden;
+    }
+
+    .mattress {
+      width: min(100%, 450px);
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 16px 14px rgba(49, 16, 72, 0.12));
+    }
+
+    .layer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      border-radius: 5px;
+      box-shadow:
+        inset 0 2px 0 rgba(255, 255, 255, 0.25),
+        inset 0 -6px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    .layer::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.3;
+      pointer-events: none;
+      background-image:
+        repeating-linear-gradient(
+          90deg,
+          transparent 0,
+          transparent 11px,
+          rgba(255,255,255,.13) 12px
+        );
+    }
+
+    .layer-cover {
+      height: 66px;
+      z-index: 5;
+      color: var(--purple-dark);
+      background: linear-gradient(180deg, #fff, #e8e5e9);
+      border: 1px solid #ddd8df;
+      border-radius: 24px 24px 8px 8px;
+    }
+
+    .layer-grid {
+      height: 58px;
+      margin: -2px 9px 0;
+      z-index: 4;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #42125f 0 7px,
+          #672786 7px 13px
+        );
+    }
+
+    .layer-comfort {
+      height: 45px;
+      margin: -2px 9px 0;
+      z-index: 3;
+      background: var(--purple-light);
+    }
+
+    .layer-foam {
+      height: 86px;
+      margin: -2px 0 0;
+      z-index: 2;
+      background: linear-gradient(180deg, #9360af, #684080);
+    }
+
+    .layer-coils {
+      height: 90px;
+      margin: -2px 0 0;
+      z-index: 2;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          #f4f2f5 0 12px,
+          #c5bdc9 12px 15px
+        );
+      border: 1px solid #c7c0ca;
+    }
+
+    .layer-base {
+      height: 64px;
+      margin: -2px 0 0;
+      z-index: 1;
+      background: linear-gradient(180deg, #6d5279, #382845);
+      border-radius: 4px 4px 14px 14px;
+    }
+
+    .layer-name {
+      position: relative;
+      z-index: 2;
+      opacity: 0.9;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    /*
+      Anatomical-chart-style annotation labels.
+      Each label uses a leader line connecting it to a mattress layer.
+    */
+
+    .annotation {
+      position: absolute;
+      z-index: 3;
+      max-width: 150px;
+      padding: 0;
+      color: var(--purple);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .annotation:hover .annotation-title,
+    .annotation:focus-visible .annotation-title {
+      color: #a12bd0;
+      text-decoration: underline;
+    }
+
+    .annotation:focus-visible {
+      outline: 3px solid var(--teal);
+      outline-offset: 5px;
+      border-radius: 4px;
+    }
+
+    .annotation-title {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.11em;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+
+    .annotation-subtitle {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      line-height: 1.3;
+    }
+
+    .annotation::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 70px;
+      height: 1px;
+      background: var(--purple);
+    }
+
+    .annotation::before {
+      content: "";
+      position: absolute;
+      top: calc(50% - 4px);
+      width: 8px;
+      height: 8px;
+      border: 2px solid var(--purple);
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .annotation.left {
+      left: 18px;
+    }
+
+    .annotation.left::after {
+      left: calc(100% + 9px);
+    }
+
+    .annotation.left::before {
+      left: calc(100% + 76px);
+    }
+
+    .annotation.right {
+      right: 18px;
+      text-align: right;
+    }
+
+    .annotation.right::after {
+      right: calc(100% + 9px);
+    }
+
+    .annotation.right::before {
+      right: calc(100% + 76px);
+    }
+
+    .annotation.cover {
+      top: 112px;
+    }
+
+    .annotation.grid {
+      top: 220px;
+    }
+
+    .annotation.base {
+      bottom: 124px;
+    }
+
+    .annotation.coils {
+      top: 320px;
+    }
+
+    .feature-list {
+      display: grid;
+      gap: 10px;
+      margin: 24px 0;
+      padding: 0;
+      list-style: none;
+      color: var(--ink);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .feature-list li::before {
+      content: "+";
+      display: inline-block;
+      width: 24px;
+      color: var(--purple);
+      font-weight: 700;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 22px;
+      border-radius: 999px;
+      border: 1px solid var(--purple);
+      color: var(--purple);
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform 160ms ease, background 160ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      transform: translateY(-2px);
+      background: #f5eef8;
+    }
+
+    .button.primary {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: #123e35;
+    }
+
+    /*
+      Modal: Bombas-inspired promotional-dialog pattern.
+      The modal is intentionally generic rather than copying branded assets.
+    */
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(32, 17, 39, 0.68);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .modal-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      position: relative;
+      width: min(100%, 520px);
+      max-height: min(720px, 90vh);
+      overflow: auto;
+      padding: 42px 34px 32px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+      transform: translateY(14px) scale(0.98);
+      transition: transform 180ms ease;
+    }
+
+    .modal-backdrop.is-open .modal {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 0;
+      border-radius: 50%;
+      color: #fff;
+      background: #4d4b4e;
+      cursor: pointer;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .modal-close:hover,
+    .modal-close:focus-visible {
+      background: var(--purple);
+    }
+
+    .modal-kicker {
+      margin: 0 0 10px;
+      color: var(--purple);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .modal h2 {
+      margin: 0 0 14px;
+      color: var(--purple);
+      font-size: 2rem;
+      line-height: 1.05;
+    }
+
+    .modal p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .modal-note {
+      padding: 14px;
+      border-left: 4px solid var(--teal);
+      background: #f3fffb;
+      color: var(--ink) !important;
+      font-size: 0.92rem;
+    }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 850px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      .comparison {
+        grid-template-columns: 1fr;
+        gap: 80px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .hero {
+        padding-top: 52px;
+      }
+
+      .diagram-wrap {
+        min-height: 620px;
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .annotation {
+        max-width: 115px;
+      }
+
+      .annotation-title {
+        font-size: 0.62rem;
+      }
+
+      .annotation-subtitle {
+        font-size: 0.63rem;
+      }
+
+      .annotation.left {
+        left: 5px;
+      }
+
+      .annotation.right {
+        right: 5px;
+      }
+
+      .annotation::after {
+        width: 40px;
+      }
+
+      .annotation.left::before {
+        left: calc(100% + 45px);
+      }
+
+      .annotation.right::before {
+        right: calc(100% + 45px);
+      }
+
+      .modal {
+        padding: 40px 22px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+      <div class="brand">Sleep Science</div>
+
+      <div class="nav-links">
+        <a href="#comparison">Mattresses</a>
+        <a href="#comparison">Pillows</a>
+        <a href="#comparison">Bedding</a>
+        <a href="#comparison">Reviews</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Interactive Mattress Anatomy</div>
+      <h1>Compare Mattress Layers.</h1>
+      <p>
+        Select any labeled layer to learn how it contributes to comfort,
+        support, airflow, and pressure relief.
+      </p>
+    </section>
+
+    <section id="comparison" class="comparison" aria-label="Mattress comparison">
+      <!-- ORIGINAL MATTRESS -->
+      <article class="product-card">
+        <div class="product-heading">
+          <h2>The Original</h2>
+          <p>The classic balanced-comfort construction.</p>
+          <div class="price">From $649</div>
+        </div>
+
+        <div class="diagram-wrap" aria-label="Annotated diagram of The Original mattress">
+          <button
+            class="annotation left cover"
+            type="button"
+            data-title="Original Stretch Cover"
+            data-description="A soft, flexible, breathable cover designed to move with the mattress surface and allow the comfort layer to respond naturally."
+          >
+            <span class="annotation-title">Original Stretch Cover</span>
+            <span class="annotation-subtitle">Soft and breathable</span>
+          </button>
+
+          <button
+            class="annotation right grid"
+            type="button"
+            data-title="Smart Comfort Grid"
+            data-description="A pressure-relieving comfort layer designed to flex under the body while remaining supportive in areas that need more resistance."
+          >
+            <span class="annotation-title">Smart Comfort Grid™</span>
+            <span class="annotation-subtitle">2-inch comfort layer</span>
+          </button>
+
+          <button
+            class="annotation left base"
+            type="button"
+            data-title="Dual-Layer Foam Base"
+            data-description="A two-layer polyurethane foam foundation that provides structure and stabilizes the mattress."
+          >
+            <span class="annotation-title">Dual-Layer Foam Base</span>
+            <span class="annotation-subtitle">Stable foam foundation</span>
+          </button>
+
+          <div class="mattress" aria-label="Original mattress layer illustration">
+            <div class="layer layer-cover">
+              <span class="layer-name">Cover</span>
+            </div>
+            <div class="layer layer-grid">
+              <span class="layer-name">Comfort Grid</span>
+            </div>
+            <div class="layer layer-comfort"></div>
+            <div class="layer layer-foam">
+              <span class="layer-name">Foam Base</span>
+            </div>
+            <div class="layer layer-base"></div>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>Smart Comfort Grid™: 2 inches</li>
+          <li>Feel: medium-firm</li>
+          <li>Base: dual-layer polyurethane foam</li>
+        </ul>
+
+        <div class="actions">
+          <button class="button primary" type="button" data-open-general>
+            Learn more
+          </button>
+          <a class="button" href="#comparison">Compare</a>
+        </div>
+      </article>
+
+      <!-- ALL-NEW MATTRESS -->
+      <article class="product-card">
+        <div class="product-heading">
+          <h2>The All-New</h2>
+          <p>A customizable construction with responsive support.</p>
+          <div class="price">From $1,299</div>
+        </div>
+
+        <div class="diagram-wrap" aria-label="Annotated diagram of The All-New mattress">
+          <button
+            class="annotation left cover"
+            type="button"
+            data-title="Premium StretchMax Cover"
+            data-description="A highly stretchable cover intended to flex with different comfort-layer heights while supporting airflow through the surface."
+          >
+            <span class="annotation-title">Premium StretchMax Cover</span>
+            <span class="annotation-subtitle">Flexible outer cover</span>
+          </button>
+
+          <button
+            class="annotation right grid"
+            type="button"
+            data-title="Customizable Smart Comfort Grid"
+            data-description="The comfort layer is available in different thicknesses, allowing the mattress feel to be configured as firm, medium, or soft."
+          >
+            <span class="annotation-title">Customizable Grid™</span>
+            <span class="annotation-subtitle">2, 3, or 4 inches</span>
+          </button>
+
+          <button
+            class="annotation right coils"
+            type="button"
+            data-title="Responsive Support Coils"
+            data-description="A coil-based support system intended to provide responsive support, durability, and improved motion management."
+          >
+            <span class="annotation-title">Responsive Support Coils</span>
+            <span class="annotation-subtitle">Dynamic support layer</span>
+          </button>
+
+          <div class="mattress" aria-label="All-New mattress layer illustration">
+            <div class="layer layer-cover">
+              <span class="layer-name">StretchMax Cover</span>
+            </div>
+            <div class="layer layer-grid">
+              <span class="layer-name">Custom Grid</span>
+            </div>
+            <div class="layer layer-comfort"></div>
+            <div class="layer layer-coils">
+              <span class="layer-name">Support Coils</span>
+            </div>
+            <div class="layer layer-base"></div>
+          </div>
+        </div>
+
+        <ul class="feature-list">
+          <li>Smart Comfort Grid™: 2, 3, or 4 inches</li>
+          <li>Feel: firm, medium, or soft</li>
+          <li>Base: polyurethane foam and responsive coils</li>
+        </ul>
+
+        <div class="actions">
+          <button class="button primary" type="button" data-open-general>
+            Learn more
+          </button>
+          <a class="button" href="#comparison">Compare</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Shared modal -->
+  <div
+    class="modal-backdrop"
+    id="layerModal"
+    role="presentation"
+    aria-hidden="true"
+  >
+    <section
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modalTitle"
+      aria-describedby="modalDescription"
+    >
+      <button
+        class="modal-close"
+        id="modalClose"
+        type="button"
+        aria-label="Close information dialog"
+      >
+        ×
+      </button>
+
+      <p class="modal-kicker">Layer details</p>
+      <h2 id="modalTitle">Mattress layer</h2>
+      <p id="modalDescription">
+        Information about this mattress layer will appear here.
+      </p>
+
+      <p class="modal-note">
+        This interactive explanation is for product education. Replace this
+        text with your verified product specifications before publishing.
+      </p>
+
+      <div class="modal-actions">
+        <button class="button primary" id="modalContinue" type="button">
+          Continue exploring
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const modalBackdrop = document.querySelector("#layerModal");
+    const modal = document.querySelector(".modal");
+    const modalClose = document.querySelector("#modalClose");
+    const modalContinue = document.querySelector("#modalContinue");
+    const modalTitle = document.querySelector("#modalTitle");
+    const modalDescription = document.querySelector("#modalDescription");
+    const annotationButtons = document.querySelectorAll(".annotation");
+    const generalButtons = document.querySelectorAll("[data-open-general]");
+
+    let lastFocusedElement = null;
+
+    function openModal(title, description, trigger) {
+      lastFocusedElement = trigger || document.activeElement;
+
+      modalTitle.textContent = title;
+      modalDescription.textContent = description;
+
+      modalBackdrop.classList.add("is-open");
+      modalBackdrop.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+
+      modalClose.focus();
+    }
+
+    function closeModal() {
+      modalBackdrop.classList.remove("is-open");
+      modalBackdrop.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      if (lastFocusedElement) {
+        lastFocusedElement.focus();
+      }
+    }
+
+    annotationButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        openModal(
+          button.dataset.title,
+          button.dataset.description,
+          button
+        );
+      });
+    });
+
+    generalButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        openModal(
+          "Explore the mattress construction",
+          "Select any labeled part of the diagram to learn what that layer is designed to do.",
+          button
+        );
+      });
+    });
+
+    modalClose.addEventListener("click", closeModal);
+    modalContinue.addEventListener("click", closeModal);
+
+    modalBackdrop.addEventListener("click", (event) => {
+      if (event.target === modalBackdrop) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && modalBackdrop.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+
+    // Prevent clicks inside the dialog from being treated as backdrop clicks.
+    modal.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  </script>
+</body>
+</html>
